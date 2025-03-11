@@ -1,0 +1,32 @@
+<template>
+    <div class="w-full">
+        <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
+        <div v-if="loading" className="text-center">Loading ...</div>
+        <div v-else-if="error" className="text-red-500">{{error}}</div>
+        <div v-else className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <ProductCard v-for="product in products" :key="product.id" :product="product"/>
+        </div>
+    </div>
+</template>
+
+<script setup>
+    import axios from 'axios';
+    import {ref, onMounted} from 'vue';
+    import ProductCard from '@/components/productCard/ProductCard.vue'
+
+    const error = ref(null);
+    const products = ref([]);
+    const loading = ref(true);
+
+    onMounted(async () => {
+        try {
+            const response = await axios.get("https://fakestoreapi.com/products")
+            products.value = response.data
+        } catch (err) {
+            error.value = "Failed to load products";
+        } finally {
+            loading.value = false;
+        }
+    })
+
+</script>
