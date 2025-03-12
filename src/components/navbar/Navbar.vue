@@ -1,6 +1,6 @@
 <template>
     <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
-        <h1 className="text-white text-xl">E-Commerce</h1>
+        <h1 @click="goToHomePage" className="text-white text-xl cursor-pointer">E-Commerce</h1>
         <div className="flex items-center">
             <span className="text-white !mr-5">
                 Welcome <span className="!font-bold">{{ user }} 👋</span> 
@@ -11,6 +11,7 @@
                     alt="cart"
                     loading="lazy"
                     @click="toogleCart"
+                    id="toggle-cart-button"
                     className="cursor-pointer"
                     src="@/components/icons/cart.svg" 
                 >
@@ -23,7 +24,7 @@
                 src="@/components/icons/logout.svg"
             />
         </div>
-        <Cart :open="showDrawer"/>
+        <Cart :open="showDrawer" :toggleCart="toogleCart"/>
     </nav>
 </template>
 
@@ -44,6 +45,10 @@
 
     const toogleCart = () => {
         showDrawer.value = !showDrawer.value
+    }
+
+    const goToHomePage = () => {
+        router.push("/");
     }
 
     onMounted(async () => {

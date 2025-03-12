@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <NavBar/>
-        <div className="p-5">
+        <div className="p-5 overflow-x-hidden">
             <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
             <div v-if="loading" className="text-center">Loading ...</div>
             <div v-else-if="error" className="text-red-500">{{error}}</div>
