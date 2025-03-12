@@ -18,19 +18,31 @@ const routes = [
     {
         path: "/",
         name: "Home",
-        component: Home
+        component: Home,
+        meta: {requiresAuth: true}
     },
     {
         props: true,
         path: "/product/:id",
         name: "Product Detail",
-        component: ProductDetails
+        component: ProductDetails,
+        meta: {requiresAuth: true}
     }
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    const isAuthentificated = !!localStorage.getItem("token");
+
+    if(to.meta.requiresAuth && !isAuthentificated){
+        next("/login");
+    }else{
+        next();
+    }
 })
 
 export default router

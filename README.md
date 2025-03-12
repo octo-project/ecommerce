@@ -33,6 +33,8 @@ npm run build
 2 - Display product using ProductCard.vue component. 
 3 - Add loading and error handling.
 
+4 - Navigation Guards
+
 ## Product Listing
 ## Product Details
 ## Shopping Cart
