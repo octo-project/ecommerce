@@ -5,7 +5,8 @@
             <span className="text-white !mr-5">
                 Welcome <span className="!font-bold">{{ user }} 👋</span> 
             </span>
-            <span className="text-white !mr-5">
+            <span className="relative text-white !mr-5">
+                <span className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
                 <img 
                     width="25" 
                     alt="cart"
@@ -36,6 +37,7 @@
 
     const router = useRouter();
     const user = ref<string>('');
+    const productCount = ref<number>(5);
     const showDrawer = ref<Boolean>(false);
 
     const logout = () => {
