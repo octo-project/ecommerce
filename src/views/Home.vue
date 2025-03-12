@@ -1,5 +1,6 @@
 <template>
     <div class="w-full">
+        <NavBar/>
         <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
         <div v-if="loading" className="text-center">Loading ...</div>
         <div v-else-if="error" className="text-red-500">{{error}}</div>
@@ -12,7 +13,8 @@
 <script setup>
     import axios from 'axios';
     import {ref, onMounted} from 'vue';
-    import ProductCard from '@/components/productCard/ProductCard.vue'
+    import NavBar from '@/components/navbar/Navbar.vue';
+    import ProductCard from '@/components/productCard/ProductCard.vue';
 
     const error = ref(null);
     const products = ref([]);
