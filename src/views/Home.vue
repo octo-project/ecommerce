@@ -1,11 +1,13 @@
 <template>
     <div class="w-full">
         <NavBar/>
-        <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
-        <div v-if="loading" className="text-center">Loading ...</div>
-        <div v-else-if="error" className="text-red-500">{{error}}</div>
-        <div v-else className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <ProductCard v-for="product in products" :key="product.id" :product="product"/>
+        <div className="p-5">
+            <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
+            <div v-if="loading" className="text-center">Loading ...</div>
+            <div v-else-if="error" className="text-red-500">{{error}}</div>
+            <div v-else className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <ProductCard v-for="product in products" :key="product.id" :product="product"/>
+            </div>
         </div>
     </div>
 </template>

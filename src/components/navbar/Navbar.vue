@@ -1,17 +1,29 @@
 <template>
     <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
         <h1 className="text-white text-xl">E-Commerce</h1>
-        <div>
+        <div className="flex items-center">
             <span className="text-white !mr-5">
                 Welcome <span className="!font-bold">{{ user }} 👋</span> 
             </span>
-            <button 
+            <span className="text-white !mr-5">
+                <img 
+                    width="25" 
+                    alt="cart"
+                    loading="lazy"
+                    @click="toogleCart"
+                    className="cursor-pointer"
+                    src="@/components/icons/cart.svg" 
+                >
+            </span>
+            <img 
+                width="35"
+                loading="lazy"
                 @click="logout"
-                className="bg-red-500 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-red-700"
-            >
-            Logout
-            </button>
+                className="cursor-pointer"
+                src="@/components/icons/logout.svg"
+            />
         </div>
+        <Cart :open="showDrawer"/>
     </nav>
 </template>
 
@@ -19,13 +31,19 @@
     import {ref, onMounted} from 'vue';
     import {jwtDecode} from 'jwt-decode';
     import {useRouter} from 'vue-router';
+    import Cart from '@/components/cart/cart.vue';
 
     const router = useRouter();
     const user = ref<string>('');
+    const showDrawer = ref<Boolean>(false);
 
     const logout = () => {
         localStorage.removeItem("token");
         router.push("/login");
+    }
+
+    const toogleCart = () => {
+        showDrawer.value = !showDrawer.value
     }
 
     onMounted(async () => {
