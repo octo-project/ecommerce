@@ -1,33 +1,31 @@
 <template>
-    <div>
-        <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
-            <h1 className="text-white text-xl">E-Commerce</h1>
-            <div className="flex items-center">
-                <span className="text-white !mr-5">
-                    Welcome <span className="!font-bold">{{ user }} 👋</span> 
-                </span>
-                <span className="text-white !mr-5">
-                    <img 
-                        width="25" 
-                        alt="cart"
-                        loading="lazy"
-                        id="toggle-cart-button"
-                        className="cursor-pointer"
-                        @click.prevent="toogleCart"
-                        src="@/components/icons/cart.svg" 
-                    >
-                </span>
+    <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
+        <h1 @click="goToHomePage" className="text-white text-xl cursor-pointer">E-Commerce</h1>
+        <div className="flex items-center">
+            <span className="text-white !mr-5">
+                Welcome <span className="!font-bold">{{ user }} 👋</span> 
+            </span>
+            <span className="text-white !mr-5">
                 <img 
-                    width="35"
+                    width="25" 
+                    alt="cart"
                     loading="lazy"
-                    @click="logout"
+                    @click="toogleCart"
+                    id="toggle-cart-button"
                     className="cursor-pointer"
-                    src="@/components/icons/logout.svg"
-                />
-            </div>
-        </nav>
-        <!-- <Cart :open="showDrawer" :toggleCart="toogleCart"/> -->
-    </div>    
+                    src="@/components/icons/cart.svg" 
+                >
+            </span>
+            <img 
+                width="35"
+                loading="lazy"
+                @click="logout"
+                className="cursor-pointer"
+                src="@/components/icons/logout.svg"
+            />
+        </div>
+        <Cart :open="showDrawer" :toggleCart="toogleCart"/>
+    </nav>
 </template>
 
 <script setup lang="ts">
@@ -47,6 +45,10 @@
 
     const toogleCart = () => {
         showDrawer.value = !showDrawer.value
+    }
+
+    const goToHomePage = () => {
+        router.push("/");
     }
 
     onMounted(async () => {
