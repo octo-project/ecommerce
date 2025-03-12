@@ -1,30 +1,33 @@
 <template>
-    <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
-        <h1 className="text-white text-xl">E-Commerce</h1>
-        <div className="flex items-center">
-            <span className="text-white !mr-5">
-                Welcome <span className="!font-bold">{{ user }} 👋</span> 
-            </span>
-            <span className="text-white !mr-5">
+    <div>
+        <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
+            <h1 className="text-white text-xl">E-Commerce</h1>
+            <div className="flex items-center">
+                <span className="text-white !mr-5">
+                    Welcome <span className="!font-bold">{{ user }} 👋</span> 
+                </span>
+                <span className="text-white !mr-5">
+                    <img 
+                        width="25" 
+                        alt="cart"
+                        loading="lazy"
+                        id="toggle-cart-button"
+                        className="cursor-pointer"
+                        @click.prevent="toogleCart"
+                        src="@/components/icons/cart.svg" 
+                    >
+                </span>
                 <img 
-                    width="25" 
-                    alt="cart"
+                    width="35"
                     loading="lazy"
-                    @click="toogleCart"
+                    @click="logout"
                     className="cursor-pointer"
-                    src="@/components/icons/cart.svg" 
-                >
-            </span>
-            <img 
-                width="35"
-                loading="lazy"
-                @click="logout"
-                className="cursor-pointer"
-                src="@/components/icons/logout.svg"
-            />
-        </div>
-        <Cart :open="showDrawer"/>
-    </nav>
+                    src="@/components/icons/logout.svg"
+                />
+            </div>
+        </nav>
+        <!-- <Cart :open="showDrawer" :toggleCart="toogleCart"/> -->
+    </div>    
 </template>
 
 <script setup lang="ts">
