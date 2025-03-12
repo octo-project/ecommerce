@@ -50,6 +50,18 @@
         }
     }
 
+    // onMounted( async () => {
+    //     try {
+    //         const response = fetch('https://fakestoreapi.com/users')
+    //         .then(response => response.json())
+    //         .then(data => console.log(data));
+
+    //         console.log("users : ", response);
+    //     } catch (error) {
+            
+    //     }
+    // })
+
     const goToSignUp = () => {
         router.push('/sign-up')
     }
