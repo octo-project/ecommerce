@@ -1,3 +1,4 @@
+import Login from '@/views/Login.vue';
 import {DirectiveBinding} from 'vue'
 
 interface ClickAwayElement extends HTMLElement {
@@ -7,10 +8,13 @@ interface ClickAwayElement extends HTMLElement {
 const vClickAway = {
     beforeMount(el: ClickAwayElement, binding: DirectiveBinding) {
         el.__clickAwayHandler__ = (event: Event) => {
-            const toggleButton = document.getElementById("toggle-cart-button");
+            const currentId = (event.target as HTMLElement).id;
+            const currentClass = (event.target as HTMLElement).className;
 
-            if(toggleButton && toggleButton.contains(event.target as Node))
-                return;
+            if(["toggle-cart-button", "close-modal-button", "close-modal-button-action", "click-away-modal"].includes(currentId))
+                return
+            if(currentClass.includes('disabled-close'))
+                return
 
             if(!el.contains(event.target as Node)){
                 binding.value(event);

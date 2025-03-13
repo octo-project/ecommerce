@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full min-h-screen">
+    <div class="w-full min-h-screen relative">
         <NavBar/>
         <div v-if="loading" className="text-center">Loading ...</div>
         <div v-else-if="error" className="text-red-500">{{ error }}</div>
@@ -18,6 +18,7 @@
                 </div>
             </div>
         </div>
+        <SnackBar :type="'error'" :message="'Operation failed'"/>
     </div>
 </template>
 
@@ -27,6 +28,7 @@
     import {jwtDecode} from 'jwt-decode';
     import {useRoute, useRouter} from 'vue-router';
     import NavBar from '@/components/navbar/Navbar.vue';
+    import SnackBar from '@/components/snackbar/Snackbar.vue';
 
     interface ProductDetail {
         id: number; 
