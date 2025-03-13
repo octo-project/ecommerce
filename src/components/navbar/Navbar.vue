@@ -1,29 +1,31 @@
 <template>
     <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
-        <h1 @click="goToHomePage" className="text-white text-xl cursor-pointer">E-Commerce</h1>
-        <div className="flex items-center">
+        <h1 @click="goToHomePage" className="app-title text-white text-xl cursor-pointer">E-Commerce</h1>
+        <div className="navbar-menu flex items-center">
             <span className="text-white !mr-5">
                 Welcome <span className="!font-bold">{{ user }} 👋</span> 
             </span>
-            <span className="relative text-white !mr-5">
-                <span className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
+            <div className="flex items-center">
+                <span className="relative text-white !mr-5">
+                    <span className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
+                    <img 
+                        width="25" 
+                        alt="cart"
+                        loading="lazy"
+                        @click="toogleCart"
+                        id="toggle-cart-button"
+                        className="cursor-pointer"
+                        src="@/components/icons/cart.svg" 
+                    >
+                </span>
                 <img 
-                    width="25" 
-                    alt="cart"
+                    width="35"
                     loading="lazy"
-                    @click="toogleCart"
-                    id="toggle-cart-button"
+                    @click="logout"
                     className="cursor-pointer"
-                    src="@/components/icons/cart.svg" 
-                >
-            </span>
-            <img 
-                width="35"
-                loading="lazy"
-                @click="logout"
-                className="cursor-pointer"
-                src="@/components/icons/logout.svg"
-            />
+                    src="@/components/icons/logout.svg"
+                />
+            </div>
         </div>
         <Cart :open="showDrawer" :toggleCart="toogleCart"/>
     </nav>
@@ -38,7 +40,7 @@
     const router = useRouter();
     const user = ref<string>('');
     const productCount = ref<number>(5);
-    const showDrawer = ref<Boolean>(false);
+    const showDrawer = ref<boolean>(false);
 
     const logout = () => {
         localStorage.removeItem("token");

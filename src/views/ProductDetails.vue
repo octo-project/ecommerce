@@ -3,11 +3,11 @@
         <NavBar/>
         <div v-if="loading" className="text-center">Loading ...</div>
         <div v-else-if="error" className="text-red-500">{{ error }}</div>
-        <div v-else className="flex p-5 items-center" :style="{ height: 'calc(100vh - 80px)' }">
+        <div v-else className="product-detail-container flex p-5 items-center" :style="{ height: 'calc(100vh - 80px)' }">
             <img :src="product.image" :alt="product.title" className="h-64 object-scale-down rounded" loading="lazy"/>
             <div className="!ml-5">
                 <h1 className="text-2xl font-bold mt-4">{{ product.title }}</h1>
-                <p className="text-gray-600 mt-2 ">{{ product.description }}</p>
+                <p className="product-description text-gray-600 !mt-2">{{ product.description }}</p>
                 <p className="text-xl font-semibold !my-4">
                     Price : 
                     <span className="!font-bold">{{ product.price }} $</span>
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <SnackBar :type="'error'" :message="'Operation failed'"/>
+        <SnackBar :type="'succes'" :message="'Operation failed'"/>
     </div>
 </template>
 
@@ -40,7 +40,7 @@
 
     const route = useRoute();
     const router = useRouter();
-    const loading = ref<Boolean>(true);
+    const loading = ref<boolean>(true);
     const userId = ref<string|null>(null);
     const error = ref<string | null>(null);
     const product = ref<ProductDetail | null>(null);

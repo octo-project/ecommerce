@@ -1,6 +1,6 @@
 <template>
-    <div id="click-away-modal" className="absolute flex justify-center items-center top-0 left-0 w-full min-h-screen bg-[#232c2585]">
-        <div className="bg-white disabled-close w-md rounded-lg flex justify-between flex-col" :style="{'height': 'calc(32vh)'}">
+    <div id="click-away-modal" className="absolute !z-50 flex justify-center items-center top-0 left-0 w-full min-h-screen bg-[#232c2585]">
+        <div className="bg-white modal-confirmation disabled-close w-[380px] md:w-md  rounded-lg flex justify-between flex-col h-[calc(15vh)] lg:h-[calc(32vh)]">
             <div className="disabled-close">
                 <div className="disabled-close bg-gray-800 flex justify-between items-center text-white p-3 rounded-t-lg">
                     <h3 className="disabled-close">{{ props.title }}</h3>
