@@ -1,0 +1,31 @@
+<template>
+    <div id="click-away-modal" className="absolute flex justify-center items-center top-0 left-0 w-full min-h-screen bg-[#232c2585]">
+        <div className="bg-white disabled-close w-md rounded-lg flex justify-between flex-col" :style="{'height': 'calc(32vh)'}">
+            <div className="disabled-close">
+                <div className="disabled-close bg-gray-800 flex justify-between items-center text-white p-3 rounded-t-lg">
+                    <h3 className="disabled-close">{{ props.title }}</h3>
+                    <img @click="props.closeModal" id="close-modal-button" className="disabled-close cursor-pointer" src="@/components/icons/close.svg" width="30" alt="close" loading="lazy">
+                </div>
+                <div className="disabled-close flex !space-x-2 items-center p-3 !pt-5">
+                    <img src="@/components/icons/warning.svg" width="35" className="disabled-close" alt="warning" loading="lazy">
+                    <span className="!font-semibold disabled-close">{{ props.message }}</span>
+                </div>
+            </div>
+            <div className="disabled-close p-3 flex justify-end !space-x-2">
+                <button id="close-modal-button-action" @click="props.closeModal" className="close-button bg-gray-200 hover:bg-gray-400 px-4 py-1 rounded-lg cursor-pointer">Close</button>
+                <button className="disabled-close bg-blue-500 px-4 py-1 hover:bg-blue-700 rounded-lg text-white cursor-pointer">{{ props.okButtonLabel }}</button>
+            </div> 
+        </div>
+    </div>
+</template>
+
+<script setup lang="ts">
+
+    const props = defineProps<{
+        title: string;
+        message: string;
+        okButtonLabel: string;
+        closeModal: () => void;
+    }>()
+   
+</script>

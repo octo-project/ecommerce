@@ -11,23 +11,24 @@
                         Your cart is empty.
                     </div>
                     <div v-else className="!mt-8 w-full justify-start items-start">
-                        <CartItem v-for="cartItem in carts" :key="cartItem.id" :product-id="cartItem.productId" :quantity="cartItem.quantity"/>
+                        <CartItem v-for="cartItem in carts" :key="cartItem.id" :product-id="cartItem.productId" :quantity="cartItem.quantity" :removeProduct="removeProduct"/>
                     </div>
                 </div>
             </div>
-            
             <div>
                 <p className="text-2xl font-semibold !mb-4">Total Amount : {{ totalAmount }} $</p>
                 <button className="w-full text-white cursor-pointer px-4 py-2 bg-green-500 hover:bg-green-700">Pay with stripe</button>
             </div>
         </div>
     </Transition>
+    <Modal v-if="openConfirmationModal" :close-modal="closeModal" :message="modalContent" :title="'Remove product'" :ok-button-label="'Remove'"/>
 </template>
 
 <script setup lang="ts">
     import axios from 'axios';
     import {ref, onMounted} from 'vue';
-    import CartItem from '@/components/cart/cartItem.vue'
+    import Modal from '@/components/modal/Modal.vue';
+    import CartItem from '@/components/cart/cartItem.vue';
 
     const props = defineProps<{
         open: Boolean,
@@ -39,11 +40,22 @@
     }
 
     const carts = ref([]);
-    const totalAmount = ref<number>(250)
+    const totalAmount = ref<number>(250);
+    const modalContent = ref<string>("");
+    const openConfirmationModal = ref<Boolean>(false);
 
     onMounted(async () => {
         getCartById();
     })
+
+    const removeProduct = (productId: number) => {
+        openConfirmationModal.value = true;
+        modalContent.value =  `Are you sure to remove product ${productId}`;
+    }
+    
+    const closeModal = () => {
+        openConfirmationModal.value = false;
+    }
 
     const getCartById = async () => {
         try {

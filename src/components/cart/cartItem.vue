@@ -7,12 +7,11 @@
 </template>
 
 <script setup lang="ts">
+
     const props = defineProps<{
         quantity: number;
         productId: number; 
+        removeProduct: (productId: number) => void;
     }>()
 
-    const removeProduct = (productId: number) => {
-        console.log("remove product from cart : ", productId);
-    }
 </script>
