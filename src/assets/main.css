@@ -10,3 +10,44 @@ body {
 #app {
   font-weight: normal;
 }
+
+@media (max-width: 415px) {
+  .app-title {
+    display: none;
+  }
+  .navbar-menu{
+    width: 100%;
+    justify-content: space-between;
+  }
+  .product-detail-container{
+    flex-direction: column;
+  }
+  .product-detail-container > * {
+    margin-top: 1.50em;
+  }
+  .product-description {
+    margin-top: 4px;
+  }
+  .modal-confirmation{
+    width: 327px;
+    height: 175px !important;
+  }
+  .cart-container{
+    width: 100%;
+  }
+  .cart-heading{
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+  }
+  .login-container{
+    background: #fff;
+    box-shadow: none;
+  }
+}
+
+@media (min-width: 415px) {
+  .cart-close-img{
+    display: none;
+  }
+}

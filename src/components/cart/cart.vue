@@ -1,9 +1,10 @@
 <template>
     <Transition name="slide">
-        <div v-if="props.open" v-click-away="closeCart" :class="{'invisible': !props.open, 'absolute flex shadow-md flex-col p-5 justify-between bg-white w-sm right-0 h-screen top-0': true}">
+        <div v-if="props.open" v-click-away="closeCart" :class="{'invisible': !props.open, 'cart-container absolute z-40 flex shadow-md flex-col p-5 justify-between bg-white w-sm right-0 h-screen top-0': true}">
             <div>
-                <div>
+                <div className="cart-heading">
                     <h1 className="text-2xl font-bold mb-4">Shopping Cart</h1>
+                    <img @click="closeCart" className="cart-close-img" src="@/components/icons/close-black.svg" width="35" fill="red" alt="close">
                 </div>
                 <div className="flex justify-center" :style="{height: 'calc(100vh - 180px)'}">
                     <div v-if="carts.length == 0" className="flex items-center justify-center flex-col">
@@ -31,7 +32,7 @@
     import CartItem from '@/components/cart/cartItem.vue';
 
     const props = defineProps<{
-        open: Boolean,
+        open: boolean,
         toggleCart: () => void
     }>()
 
@@ -42,7 +43,7 @@
     const carts = ref([]);
     const totalAmount = ref<number>(250);
     const modalContent = ref<string>("");
-    const openConfirmationModal = ref<Boolean>(false);
+    const openConfirmationModal = ref<boolean>(false);
 
     onMounted(async () => {
         getCartById();

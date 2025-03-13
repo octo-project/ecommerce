@@ -1,6 +1,6 @@
 <template>
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+    <div className="flex justify-center items-center min-h-screen bg-white md:bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-none md:shadow-lg w-96">
             <h2 className="text-2xl font-bold mb-4 text-center">Sign up</h2>
             <form @submit.prevent="signUp">
                 <div className="!mb-4">
@@ -33,7 +33,7 @@
     const email = ref<string>('');
     const username = ref<string>('');
     const password = ref<string>('');   
-    const loading = ref<Boolean>(false);
+    const loading = ref<boolean>(false);
     const error = ref<string|null>(null);
     
     const router = useRouter(); 
