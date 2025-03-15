@@ -37,11 +37,11 @@
             error.value = null;
             loading.value = true;  
 
-            const response = await axios.post("https://fakestoreapi.com/auth/login",{
-                username: username.value,
+            const response = await axios.post("http://localhost:5001/login",{
+                pseudo: username.value,
                 password: password.value
             });
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.data.token);
             router.push('/')
         } catch (err) {
             error.value = 'Invalid email or password';
