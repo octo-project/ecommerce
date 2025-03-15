@@ -1,17 +1,22 @@
 <template>
     <div className="flex justify-between items-center">
-        <span>Product : {{ props.productId }}</span>
-        <span>Quantity : {{ props.quantity }}</span>
-        <img @click="removeProduct(props.productId)" className="cursor-pointer" src="@/components/icons/trash.svg" width="40" alt="trash" loading="lazy">
+        <div className="flex items-center">
+            <img :src="props.product.image" width="80" alt="product" loading="lazy">
+            <span className="line-clamp-1 w-[160px]">{{ props.product.name }}</span>
+        </div>
+        <span className="font-bold">{{ props.quantity }}</span>
+        <img @click="removeProduct(props.productId, props.product.name)" className="cursor-pointer" src="@/components/icons/trash.svg" width="40" alt="trash" loading="lazy">
     </div>
 </template>
 
 <script setup lang="ts">
+    import { ProductType } from '@/types/type';
 
     const props = defineProps<{
         quantity: number;
-        productId: number; 
-        removeProduct: (productId: number) => void;
+        productId: number;
+        product: ProductType; 
+        removeProduct: (productId: number, productName: string) => void;
     }>()
 
 </script>

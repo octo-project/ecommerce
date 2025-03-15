@@ -7,7 +7,7 @@
             </span>
             <div className="flex items-center">
                 <span className="relative text-white !mr-5">
-                    <span className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
+                    <span v-if="productCount>0" className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
                     <img 
                         width="25" 
                         alt="cart"
@@ -32,14 +32,16 @@
 </template>
 
 <script setup lang="ts">
+    import axios from 'axios';
     import {ref, onMounted} from 'vue';
     import {jwtDecode} from 'jwt-decode';
     import {useRouter} from 'vue-router';
+    import { CartType, DecodedTokenType } from '@/types/type';
     import Cart from '@/components/cart/cart.vue';
 
     const router = useRouter();
     const user = ref<string>('');
-    const productCount = ref<number>(5);
+    const productCount = ref<number>(0);
     const showDrawer = ref<boolean>(false);
 
     const logout = () => {
@@ -55,19 +57,35 @@
         router.push("/");
     }
 
+    const getCartById = async (cartId: number, token: string) => {
+        try {
+            const response = await axios.get(`http://localhost:5001/cart/${cartId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            const cart: CartType = response.data.data
+            productCount.value = cart.Products.length;
+        } catch (error) {
+            console.log("Failed to getCartById");
+        }
+    }
+
     onMounted(async () => {
         const AuthToken = localStorage.getItem("token");
 
         try {
             /**
              * DecodedToken structure
-             * sub  : number
-             * user : string 
-             * iat  : number
+             * userId  : number
+             * cartId : string 
              */
-            const decodedToken: any = jwtDecode(AuthToken);
+            const decodedToken: DecodedTokenType = jwtDecode(AuthToken);
             const username = decodedToken.pseudo;
             user.value = username[0]?.toUpperCase() + username?.slice(1);
+
+            if(decodedToken.cartId)
+                getCartById(decodedToken.cartId, AuthToken);
         } catch (error) {
             console.log("Decode token error : ", error);
         }
