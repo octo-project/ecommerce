@@ -43,9 +43,9 @@
         loading.value = true;
 
         try {
-            const response = await axios.post("https://fakestoreapi.com/users", {
+            const response = await axios.post("http://localhost:5001/signup", {
                 email: email.value,
-                username: username.value,
+                pseudo: username.value,
                 password: password.value,
             })
             router.push('/login')

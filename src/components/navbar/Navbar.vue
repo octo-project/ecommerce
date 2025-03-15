@@ -65,8 +65,8 @@
              * user : string 
              * iat  : number
              */
-            const decodedToken = jwtDecode(AuthToken);
-            const username = decodedToken.user;
+            const decodedToken: any = jwtDecode(AuthToken);
+            const username = decodedToken.pseudo;
             user.value = username[0]?.toUpperCase() + username?.slice(1);
         } catch (error) {
             console.log("Decode token error : ", error);

@@ -24,8 +24,15 @@
 
     onMounted(async () => {
         try {
-            const response = await axios.get("https://fakestoreapi.com/products")
-            products.value = response.data
+            const token = localStorage.getItem('token');
+            const response = await axios.get("http://localhost:5001/product-list", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log("product : ",response.data);
+            
+            products.value = response.data.data
         } catch (err) {
             error.value = "Failed to load products";
         } finally {
