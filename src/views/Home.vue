@@ -30,8 +30,6 @@
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log("product : ",response.data);
-            
             products.value = response.data.data
         } catch (err) {
             error.value = "Failed to load products";

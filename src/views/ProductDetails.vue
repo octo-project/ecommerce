@@ -48,8 +48,13 @@
     onMounted( async () => {
         getUserIdFromAuthToken();
         try {
-            const response = await axios.get(`https://fakestoreapi.com/products/${route.params.id}`)
-            product.value = response.data
+            const token = localStorage.getItem("token");
+            const response = await axios.get(`http://localhost:5001/product-detail/${route.params.id}`, {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            product.value = response.data.data
         } catch (error) {
             error.value = "Failed to load product details";   
         } finally {
@@ -76,7 +81,6 @@
 
         try {
             const response = axios.post('https://fakestoreapi.com/carts', cart)
-            console.log("response : ", response);
         } catch (error){
             console.log("Failed to add product to cart ... ");
         }
