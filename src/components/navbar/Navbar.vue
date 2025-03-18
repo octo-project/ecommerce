@@ -36,16 +36,19 @@
     import {ref, onMounted} from 'vue';
     import {jwtDecode} from 'jwt-decode';
     import {useRouter} from 'vue-router';
-    import { CartType, DecodedTokenType } from '@/types/type';
     import Cart from '@/components/cart/cart.vue';
+    import { useUserStore } from '@/stores/user-store';
+    import { CartType, DecodedTokenType } from '@/types/type';
 
     const router = useRouter();
     const user = ref<string>('');
+    const {authUser} = useUserStore();
     const productCount = ref<number>(0);
     const showDrawer = ref<boolean>(false);
+    const {clearAuthUser} = useUserStore();
 
     const logout = () => {
-        localStorage.removeItem("token");
+        clearAuthUser();
         router.push("/login");
     }
 
@@ -72,20 +75,11 @@
     }
 
     onMounted(async () => {
-        const AuthToken = localStorage.getItem("token");
-
         try {
-            /**
-             * DecodedToken structure
-             * userId  : number
-             * cartId : string 
-             */
-            const decodedToken: DecodedTokenType = jwtDecode(AuthToken);
-            const username = decodedToken.pseudo;
-            user.value = username[0]?.toUpperCase() + username?.slice(1);
+            user.value = authUser.pseudo[0]?.toUpperCase() + authUser.pseudo?.slice(1);
 
-            if(decodedToken.cartId)
-                getCartById(decodedToken.cartId, AuthToken);
+            if(authUser.cartId)
+                getCartById(authUser.cartId, authUser.token);
         } catch (error) {
             console.log("Decode token error : ", error);
         }

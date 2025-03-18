@@ -25,12 +25,16 @@
     import {ref} from 'vue';
     import axios from 'axios';
     import {useRouter} from 'vue-router';
+    import { jwtDecode } from 'jwt-decode';
+    import { DecodedTokenType } from '@/types/type';
+    import { useUserStore } from '@/stores/user-store';
 
     const router = useRouter();
     const username = ref<string>('');
     const password = ref<string>('');
     const loading = ref<boolean>(false);
     const error = ref<string|null>(null);
+    const {setAuthUser} = useUserStore();
 
     const login = async () => {
         try {
@@ -41,8 +45,15 @@
                 pseudo: username.value,
                 password: password.value
             });
-            localStorage.setItem('token', response.data.data.token);
-            router.push('/')
+            if(response.data.data.token){
+                const token = response.data.data.token
+                const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(response.data.data.token);
+                const decodedToken: DecodedTokenType = {...jswtDecodedToken, token}
+                setAuthUser(decodedToken)
+                router.push('/')
+            }else{
+                console.error("Failed to login.")
+            }
         } catch (err) {
             error.value = 'Invalid email or password';
         } finally {

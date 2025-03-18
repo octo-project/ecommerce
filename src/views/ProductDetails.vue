@@ -30,6 +30,7 @@
     import { DecodedTokenType } from '@/types/type';
     import NavBar from '@/components/navbar/Navbar.vue';
     import SnackBar from '@/components/snackbar/Snackbar.vue';
+import { useUserStore } from '@/stores/user-store';
 
     interface ProductDetail {
         id: number; 
@@ -42,23 +43,18 @@
     const route = useRoute();
     const router = useRouter();
     const loading = ref<boolean>(true);
-    const userId = ref<number|null>(null);
     const error = ref<string | null>(null);
     const product = ref<ProductDetail | null>(null);
     const snackBarState=ref<'succes'|'error'|null>(null);
     const snackBarMessage=ref<string>("");
-
-    const token = localStorage.getItem("token");
-    const decodedToken: DecodedTokenType = jwtDecode(token);
-
+    const {authUser} = useUserStore();
+    const userId = ref<number>(authUser.userId);
     
     onMounted( async () => {
-        getUserIdFromAuthToken();
         try {
-            const token = localStorage.getItem("token");
             const response = await axios.get(`http://localhost:5001/product-detail/${route.params.id}`, {
                 headers:{
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${authUser.token}`
                 }
             })
             product.value = response.data.data
@@ -69,25 +65,17 @@
         }
     })
 
-    const getUserIdFromAuthToken = () => {
-        try {
-            userId.value = decodedToken.userId
-        } catch (error) {
-            console.log("Decode token error : ", error);
-        }
-    }
-
     const goBack = () => {
         router.back();
     }
 
     const addToCart = async () => {
-        const cart = {userId: userId.value, quantity: 1,  productId: product.value.id, cartId: decodedToken.cartId};
+        const cart = {userId: userId.value, quantity: 1,  productId: product.value.id, cartId: authUser.cartId};
 
         try {
             const response = await axios.post('http://localhost:5001/add-product-to-cart', cart, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${authUser.token}`
                 }
             })
             if(response.status == 200){

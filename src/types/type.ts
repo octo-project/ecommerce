@@ -1,9 +1,14 @@
 /**
- * Token
+ * Decoded Token
+ * - dont use pseudo from DecodedTokenType 
+ * instead use the userId to get the pseudo
+ * - i put the token here to avoid getting 
+ * token from localStorage
  */
 export type DecodedTokenType = {
     exp: number; 
     iat: number; 
+    token: string;
     email: string;
     pseudo: string; 
     userId: number;

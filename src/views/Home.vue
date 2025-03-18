@@ -15,19 +15,20 @@
 <script setup>
     import axios from 'axios';
     import {ref, onMounted} from 'vue';
+    import { useUserStore } from '@/stores/user-store';
     import NavBar from '@/components/navbar/Navbar.vue';
     import ProductCard from '@/components/productCard/ProductCard.vue';
 
     const error = ref(null);
     const products = ref([]);
     const loading = ref(true);
+    const {authUser} = useUserStore();  
 
     onMounted(async () => {
         try {
-            const token = localStorage.getItem('token');
             const response = await axios.get("http://localhost:5001/product-list", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${authUser.token}`
                 }
             })
             products.value = response.data.data
