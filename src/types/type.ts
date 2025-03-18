@@ -15,6 +15,15 @@ export type DecodedTokenType = {
     cartId: number | null;
 }
 
+export type UserType = {
+    id: number; 
+    email: string;
+    pseudo: string;
+    createdAt: string;
+    firstName: string;
+    updatedAt: string;
+}
+
 export type ProductType = {
     name: string;
     image: string; 

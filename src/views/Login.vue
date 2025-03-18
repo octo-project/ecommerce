@@ -28,6 +28,7 @@
     import { jwtDecode } from 'jwt-decode';
     import { DecodedTokenType } from '@/types/type';
     import { useUserStore } from '@/stores/user-store';
+    import { authentificate } from '@/services/authServices';
 
     const router = useRouter();
     const username = ref<string>('');
@@ -41,37 +42,18 @@
             error.value = null;
             loading.value = true;  
 
-            const response = await axios.post("http://localhost:5001/login",{
-                pseudo: username.value,
-                password: password.value
-            });
-            if(response.data.data.token){
-                const token = response.data.data.token
-                const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(response.data.data.token);
+            await authentificate(username.value, password.value, (token: string) => {
+                const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(token);
                 const decodedToken: DecodedTokenType = {...jswtDecodedToken, token}
                 setAuthUser(decodedToken)
-                router.push('/')
-            }else{
-                console.error("Failed to login.")
-            }
+                router.push('/');
+            })
         } catch (err) {
             error.value = 'Invalid email or password';
         } finally {
             loading.value = false   
         }
     }
-
-    // onMounted( async () => {
-    //     try {
-    //         const response = fetch('https://fakestoreapi.com/users')
-    //         .then(response => response.json())
-    //         .then(data => console.log(data));
-
-    //         console.log("users : ", response);
-    //     } catch (error) {
-            
-    //     }
-    // })
 
     const goToSignUp = () => {
         router.push('/sign-up')

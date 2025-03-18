@@ -1,25 +1,28 @@
 import {defineStore} from 'pinia';
 import {useCacheStore} from './cache-store';
-import { DecodedTokenType } from '@/types/type';
+import { DecodedTokenType, UserType } from '@/types/type';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
+        connectedUser: {} as UserType | null,
         authUser: {} as DecodedTokenType | null, 
     }),
     actions: {
+        setConnectedUser(data: UserType){
+            this.connectedUser = data
+        },
         clearAuthUser() {
             const cacheStore = useCacheStore();
 
             cacheStore.setCache("authUser", null);
             this.authUser = null;
-            return
         },
         setAuthUser(data: DecodedTokenType){
             const cacheStore = useCacheStore();
 
             cacheStore.setCache("authUser", data);
+            localStorage.setItem("token", data.token);
             this.authUser = data;
-            return
         },
         getAuthUser(){
             return this.authUser;
