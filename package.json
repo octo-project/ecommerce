@@ -1,5 +1,6 @@
 {
   "name": "my-ecommerce",
+  "description": "vue + tailwind + react project with node backEnd",
   "version": "0.0.0",
   "private": true,
   "type": "module",

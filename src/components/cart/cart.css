@@ -1,0 +1,28 @@
+ /* Slide-in animation */
+ .slide-enter-active,
+ .slide-leave-active {
+     transition: transform 0.3s ease-in-out, opacity 0.3s;
+ }
+
+ /* Start state (hidden) */
+ .slide-enter-from {
+     transform: translateX(100%);
+     opacity: 0;
+ }
+
+ /* End state (visible) */
+ .slide-enter-to {
+     transform: translateX(0);
+     opacity: 1;
+ }
+
+ /* Exit animation */
+ .slide-leave-from {
+     transform: translateX(0);
+     opacity: 1;
+ }
+
+ .slide-leave-to {
+     transform: translateX(100%);
+     opacity: 0;
+ }

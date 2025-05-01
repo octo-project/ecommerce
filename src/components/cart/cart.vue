@@ -11,7 +11,7 @@
                         <img src="@/components/icons/empty.svg" width="80" alt="empty cart" loading="lazy"/>
                         Your cart is empty.
                     </div>
-                    <div v-else className="!mt-8 w-full justify-start items-start">
+                    <div v-else className="!mt-8 w-full justify-start overflow-auto items-start">
                         <CartItem v-for="cartItem in cartProducts" :key="cartItem.id" :product-id="cartItem.productId" :quantity="cartItem.quantity" :product="cartItem.Product" :removeProduct="removeProduct"/>
                     </div>
                 </div>
@@ -26,8 +26,10 @@
 </template>
 
 <script setup lang="ts">
+    import './cart.css'
     import axios from 'axios';
-    import {ref, onMounted} from 'vue';
+    import {ref, watch} from 'vue';
+    import { useQuery } from '@tanstack/vue-query';
     import Modal from '@/components/modal/Modal.vue';
     import { useUserStore } from '@/stores/user-store';
     import CartItem from '@/components/cart/cartItem.vue';
@@ -44,21 +46,22 @@
     }
     
     const {authUser} = useUserStore();
-    const totalAmount = ref<number>(0);
     const modalContent = ref<string>("");
-    const cart = ref<CartType|null>(null);
-    const cartProducts = ref<CartProductType[]>([]);
     const productToRemoveId = ref<number|null>(null);
     const openConfirmationModal = ref<boolean>(false);
 
-    onMounted(async () => {
-        if(authUser.cartId)
-            getCartById(authUser.cartId, authUser.token, (data: CartType)=>{
-                cart.value = data;
-                totalAmount.value = data.amount;
-                cartProducts.value = data.Products;
-            });
+    const {data} = useQuery({
+        staleTime: 1000 * 60,
+        refetchOnMount: true, 
+        refetchOnWindowFocus: true, 
+        enabled: !!authUser.cartId && !! authUser.token,
+        queryKey: ['panier', authUser.cartId, authUser.token],
+        queryFn: () => getCartById(authUser.cartId, authUser.token)
     })
+
+    const cart = ref<CartType|null>(data?.value || null);
+    const totalAmount = ref<number>(data?.value?.amount || 0);
+    const cartProducts = ref<CartProductType[]>(data?.value?.Products || []);
 
     const removeProduct = (productId: number, productName: string) => {
         openConfirmationModal.value = true;
@@ -89,35 +92,11 @@
         openConfirmationModal.value = false;
     }
 
+    watch(data, (newData) => {
+        if(newData) {
+            cart.value = newData
+            totalAmount.value = newData.amount 
+            cartProducts.value = newData.Products
+        }
+    })
 </script>
-
-<style scoped>
-    /* Slide-in animation */
-    .slide-enter-active,
-    .slide-leave-active {
-        transition: transform 0.3s ease-in-out, opacity 0.3s;
-    }
-
-    /* Start state (hidden) */
-    .slide-enter-from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-
-    /* End state (visible) */
-    .slide-enter-to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
-    /* Exit animation */
-    .slide-leave-from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-
-    .slide-leave-to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-</style>
