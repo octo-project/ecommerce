@@ -2,8 +2,8 @@
     <nav className="sticky top-0 bg-gray-800 shadow-sm p-4 flex justify-between items-center">
         <h1 @click="goToHomePage" className="app-title text-white text-xl cursor-pointer">E-Commerce</h1>
         <div className="navbar-menu flex items-center">
-            <span className="text-white !mr-5">
-                Welcome <span className="!font-bold">{{ user }} 👋</span> 
+            <span v-if="store.connectedUser.pseudo" className="text-white !mr-5">
+                Welcome <span className="!font-bold">{{ store.connectedUser.pseudo }} 👋</span> 
             </span>
             <div className="flex items-center">
                 <span className="relative text-white !mr-5">
@@ -32,20 +32,21 @@
 </template>
 
 <script setup lang="ts">
-    import axios from 'axios';
     import {ref, onMounted} from 'vue';
-    import {jwtDecode} from 'jwt-decode';
     import {useRouter} from 'vue-router';
-    import { CartType, DecodedTokenType } from '@/types/type';
     import Cart from '@/components/cart/cart.vue';
+    import { CartType, UserType } from '@/types/type';
+    import { useUserStore } from '@/stores/user-store';
+    import { getCartById } from '@/services/cartServices';
+    import { getUserDetail } from '@/services/userServices';
 
     const router = useRouter();
-    const user = ref<string>('');
     const productCount = ref<number>(0);
     const showDrawer = ref<boolean>(false);
+    const store = useUserStore();
 
     const logout = () => {
-        localStorage.removeItem("token");
+        store.clearAuthUser();
         router.push("/login");
     }
 
@@ -57,37 +58,18 @@
         router.push("/");
     }
 
-    const getCartById = async (cartId: number, token: string) => {
-        try {
-            const response = await axios.get(`http://localhost:5001/cart/${cartId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const cart: CartType = response.data.data
-            productCount.value = cart.Products.length;
-        } catch (error) {
-            console.log("Failed to getCartById");
-        }
-    }
-
     onMounted(async () => {
-        const AuthToken = localStorage.getItem("token");
-
         try {
-            /**
-             * DecodedToken structure
-             * userId  : number
-             * cartId : string 
-             */
-            const decodedToken: DecodedTokenType = jwtDecode(AuthToken);
-            const username = decodedToken.pseudo;
-            user.value = username[0]?.toUpperCase() + username?.slice(1);
-
-            if(decodedToken.cartId)
-                getCartById(decodedToken.cartId, AuthToken);
+            if(store.authUser.userId)
+                getUserDetail(store.authUser.userId, store.authUser.token, (data: UserType) => {
+                    store.setConnectedUser(data)
+                })
+            if(store.authUser.cartId)
+                getCartById(store.authUser.cartId, store.authUser.token, (data: CartType) => {
+                    productCount.value = data.Products.length;
+                });
         } catch (error) {
-            console.log("Decode token error : ", error);
+            console.error("Get user detail or Get Cart by id error : ", error);
         }
         
     })

@@ -30,6 +30,7 @@
     import {ref, onMounted} from 'vue';
     import { jwtDecode } from 'jwt-decode';
     import Modal from '@/components/modal/Modal.vue';
+    import { useUserStore } from '@/stores/user-store';
     import CartItem from '@/components/cart/cartItem.vue';
     import { CartProductType, CartType, DecodedTokenType } from '@/types/type';
 
@@ -42,19 +43,17 @@
         props.toggleCart();
     }
     
+    const {authUser} = useUserStore();
     const totalAmount = ref<number>(0);
     const modalContent = ref<string>("");
     const cart = ref<CartType|null>(null);
-    const token = localStorage.getItem("token");
     const cartProducts = ref<CartProductType[]>([]);
     const productToRemoveId = ref<number|null>(null);
     const openConfirmationModal = ref<boolean>(false);
 
     onMounted(async () => {
-        const decodedToken: DecodedTokenType = jwtDecode(token);
-
-        if(decodedToken.cartId)
-            getCartById(decodedToken.cartId, token);
+        if(authUser.cartId)
+            getCartById(authUser.cartId, authUser.token);
     })
 
     const removeProduct = (productId: number, productName: string) => {
@@ -64,15 +63,13 @@
     }
 
     const validateRemoveProduct = async () => {
-        console.log("product to remove : ", productToRemoveId.value);
-
         if(cart && productToRemoveId.value)
             try {
                 const data = {cartId: cart.value.id, productId: productToRemoveId.value}
                 const response = await axios.delete('http://localhost:5001/remove-product-from-cart', {
                     data,
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Bearer ${authUser.token}`
                     }
                 })
                 if(response.status == 200){
