@@ -24,7 +24,7 @@ export type UserType = {
     updatedAt: string;
 }
 
-export type ProductType = {
+export type CartProductItemType = {
     name: string;
     image: string; 
     price: string;
@@ -35,7 +35,7 @@ export type CartProductType = {
     cartId: number; 
     quantity: number;
     productId: number; 
-    Product: ProductType;
+    Product: CartProductItemType;
 }
 
 export type CartType = { 
@@ -46,4 +46,14 @@ export type CartType = {
     createdAt: string; 
     updatedAt: string; 
     Products: CartProductType[];
+}
+
+export type ProductType = {
+    id: number; 
+    name: string; 
+    price: number; 
+    image: string; 
+    createdAt: string; 
+    updatedAt: string;
+    description: string;
 }
