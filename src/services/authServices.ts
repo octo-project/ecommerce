@@ -9,8 +9,9 @@ export const authentificate = async (pseudo: string, password: string, callBack:
 
         if(response.status == 201){
             callBack(response.data.data.token)
+            return
         }
-        console.error("Failed to login.")
+        console.error("Failed to login. ", response.status == 201)
     } catch (error) {
         console.error("Failed to login.")
     }

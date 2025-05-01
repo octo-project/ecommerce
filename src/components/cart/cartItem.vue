@@ -10,12 +10,12 @@
 </template>
 
 <script setup lang="ts">
-    import { ProductType } from '@/types/type';
+    import { CartProductItemType } from '@/types/type';
 
     const props = defineProps<{
         quantity: number;
         productId: number;
-        product: ProductType; 
+        product: CartProductItemType; 
         removeProduct: (productId: number, productName: string) => void;
     }>()
 

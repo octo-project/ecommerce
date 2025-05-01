@@ -27,5 +27,13 @@ export const useUserStore = defineStore('user', {
         getAuthUser(){
             return this.authUser;
         } 
+    },
+    persist: {
+        pick: ["authUser" ,"connectedUser"],
+        storage: localStorage,
+        serializer: {
+            serialize: JSON.stringify,
+            deserialize: JSON.parse
+        }
     }
 })

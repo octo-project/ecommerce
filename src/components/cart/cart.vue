@@ -28,11 +28,11 @@
 <script setup lang="ts">
     import axios from 'axios';
     import {ref, onMounted} from 'vue';
-    import { jwtDecode } from 'jwt-decode';
     import Modal from '@/components/modal/Modal.vue';
     import { useUserStore } from '@/stores/user-store';
     import CartItem from '@/components/cart/cartItem.vue';
-    import { CartProductType, CartType, DecodedTokenType } from '@/types/type';
+    import { getCartById } from '@/services/cartServices';
+    import { CartProductType, CartType } from '@/types/type';
 
     const props = defineProps<{
         open: boolean,
@@ -53,7 +53,11 @@
 
     onMounted(async () => {
         if(authUser.cartId)
-            getCartById(authUser.cartId, authUser.token);
+            getCartById(authUser.cartId, authUser.token, (data: CartType)=>{
+                cart.value = data;
+                totalAmount.value = data.amount;
+                cartProducts.value = data.Products;
+            });
     })
 
     const removeProduct = (productId: number, productName: string) => {
@@ -85,21 +89,6 @@
         openConfirmationModal.value = false;
     }
 
-    const getCartById = async (cartId: number, token: string) => {
-        try {
-            const response = await axios.get(`http://localhost:5001/cart/${cartId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            const cartData: CartType = response.data.data
-            cart.value = cartData;
-            totalAmount.value = cartData.amount;
-            cartProducts.value = cartData.Products;
-        } catch (error) {
-            console.log("Failed to getCartById");
-        }
-    }
 </script>
 
 <style scoped>
