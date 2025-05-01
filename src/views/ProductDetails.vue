@@ -25,12 +25,11 @@
 <script setup lang="ts">
     import axios from 'axios';
     import {ref, onMounted} from 'vue';
-    import {jwtDecode} from 'jwt-decode';
     import {useRoute, useRouter} from 'vue-router';
-    import { DecodedTokenType } from '@/types/type';
+    import { useUserStore } from '@/stores/user-store';
     import NavBar from '@/components/navbar/Navbar.vue';
+    import { useQueryClient } from '@tanstack/vue-query';
     import SnackBar from '@/components/snackbar/Snackbar.vue';
-import { useUserStore } from '@/stores/user-store';
 
     interface ProductDetail {
         id: number; 
@@ -43,6 +42,7 @@ import { useUserStore } from '@/stores/user-store';
     const route = useRoute();
     const router = useRouter();
     const loading = ref<boolean>(true);
+    const queryClient = useQueryClient()
     const error = ref<string | null>(null);
     const product = ref<ProductDetail | null>(null);
     const snackBarState=ref<'succes'|'error'|null>(null);
@@ -81,6 +81,15 @@ import { useUserStore } from '@/stores/user-store';
             if(response.status == 200){
                 snackBarState.value = 'succes';
                 snackBarMessage.value = 'Product added to cart.';
+
+                /**
+                 * Invalidate queryKey : pqnier
+                 */
+                try {
+                    await queryClient.invalidateQueries({queryKey: ['panier']})
+                } catch (error) {
+                    console.error("invalidate cache error : ", error)
+                }
             }else{
                 snackBarState.value = 'error';
                 snackBarMessage.value = 'Failed to add product to cart.';

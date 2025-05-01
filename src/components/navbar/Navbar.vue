@@ -6,16 +6,14 @@
                 Welcome <span className="!font-bold">{{ store.connectedUser.pseudo }} 👋</span> 
             </span>
             <div className="flex items-center">
-                <span className="relative text-white !mr-5">
-                    <span v-if="productCount>0" className="absolute bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
+                <span id="toggle-cart-button" className="relative text-white cursor-pointer disabled-close !mr-5" @click="toogleCart">
+                    <span v-if="productCount>0" className="absolute disabled-close bg-blue-500 w-6 h-6 flex justify-center items-center text-center text-sm rounded-[50%] -top-[10px] -right-[15px]">{{ productCount }}</span>
                     <img 
                         width="25" 
                         alt="cart"
                         loading="lazy"
-                        @click="toogleCart"
-                        id="toggle-cart-button"
-                        className="cursor-pointer"
                         src="@/components/icons/cart.svg" 
+                        className="cursor-pointer disabled-close"
                     >
                 </span>
                 <img 
@@ -32,18 +30,19 @@
 </template>
 
 <script setup lang="ts">
-    import {ref, onMounted} from 'vue';
     import {useRouter} from 'vue-router';
+    import { UserType } from '@/types/type';
+    import {ref, onMounted, watch} from 'vue';
     import Cart from '@/components/cart/cart.vue';
-    import { CartType, UserType } from '@/types/type';
+    import { useQuery } from '@tanstack/vue-query';
     import { useUserStore } from '@/stores/user-store';
     import { getCartById } from '@/services/cartServices';
     import { getUserDetail } from '@/services/userServices';
 
     const router = useRouter();
-    const productCount = ref<number>(0);
-    const showDrawer = ref<boolean>(false);
     const store = useUserStore();
+    const { authUser } = store;
+    const showDrawer = ref<boolean>(false);
 
     const logout = () => {
         store.clearAuthUser();
@@ -58,19 +57,34 @@
         router.push("/");
     }
 
+    /**
+     * Querying product in panier
+     */
+    const {data} = useQuery({
+        staleTime: 1000 * 60,
+        refetchOnMount: true, 
+        refetchOnWindowFocus: true,
+        enabled: !!authUser.cartId && !! authUser.token,
+        queryKey: ['panier', authUser.cartId, authUser.token],
+        queryFn: () => getCartById(authUser.cartId, authUser.token)
+    })
+
+    const productCount = ref<number>(data?.value?.Products?.length || 0);
+
     onMounted(async () => {
         try {
             if(store.authUser.userId)
                 getUserDetail(store.authUser.userId, store.authUser.token, (data: UserType) => {
                     store.setConnectedUser(data)
                 })
-            if(store.authUser.cartId)
-                getCartById(store.authUser.cartId, store.authUser.token, (data: CartType) => {
-                    productCount.value = data.Products.length;
-                });
         } catch (error) {
             console.error("Get user detail or Get Cart by id error : ", error);
         }
-        
+    })
+
+    watch(data, (newData) => {
+        if(newData) {
+            productCount.value = newData?.Products?.length || 0
+        }
     })
 </script>
