@@ -10,7 +10,16 @@ export type DecodedTokenType = {
     cartId: number | null;
 }
 
-export type ProductType = {
+export type UserType = {
+    id: number; 
+    email: string;
+    pseudo: string;
+    createdAt: string;
+    firstName: string;
+    updatedAt: string;
+}
+
+export type CartProductItemType = {
     name: string;
     image: string; 
     price: string;
@@ -21,7 +30,7 @@ export type CartProductType = {
     cartId: number; 
     quantity: number;
     productId: number; 
-    Product: ProductType;
+    Product: CartProductItemType;
 }
 
 export type CartType = { 
@@ -32,4 +41,14 @@ export type CartType = {
     createdAt: string; 
     updatedAt: string; 
     Products: CartProductType[];
+}
+
+export type ProductType = {
+    id: number; 
+    name: string; 
+    price: number; 
+    image: string; 
+    createdAt: string; 
+    updatedAt: string;
+    description: string;
 }

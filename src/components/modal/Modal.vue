@@ -8,7 +8,7 @@
                 </div>
                 <div className="disabled-close flex !space-x-2 items-center p-3 !pt-5">
                     <img src="@/components/icons/warning.svg" width="35" className="disabled-close" alt="warning" loading="lazy">
-                    <div>
+                    <div className="disabled-close">
                         <span className="disabled-close">{{ props.actionMessage }}</span>
                         <span className="!font-semibold disabled-close line-clamp-2">{{ props.message }}</span>
                     </div>
