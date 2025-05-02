@@ -29,7 +29,7 @@
     import './cart.css'
     import axios from 'axios';
     import {ref, watch} from 'vue';
-    import { useQuery } from '@tanstack/vue-query';
+    import { QueryClient, useQuery } from '@tanstack/vue-query';
     import Modal from '@/components/modal/Modal.vue';
     import { useUserStore } from '@/stores/user-store';
     import CartItem from '@/components/cart/cartItem.vue';
@@ -50,7 +50,7 @@
     const productToRemoveId = ref<number|null>(null);
     const openConfirmationModal = ref<boolean>(false);
 
-    const {data} = useQuery({
+    const {data, refetch} = useQuery({
         staleTime: 1000 * 60,
         refetchOnMount: true, 
         refetchOnWindowFocus: true, 
@@ -80,9 +80,9 @@
                     }
                 })
                 if(response.status == 200){
+                    await refetch();
                     closeModal();
                 }
-                console.log("response : ", response);
             } catch (error) {
                 console.log("Failed to remove product from cart");
             }
@@ -91,6 +91,7 @@
     const closeModal = () => {
         openConfirmationModal.value = false;
     }
+
 
     watch(data, (newData) => {
         if(newData) {
