@@ -3,9 +3,9 @@
         <NavBar/>
         <div v-if="loading" className="text-center">Loading ...</div>
         <div v-else-if="error" className="text-red-500">{{ error }}</div>
-        <div v-else className="product-detail-container flex flex-col md:flex-row p-5 items-center" :style="{ height: 'calc(100vh - 80px)' }">
+        <div v-else className="product-detail-container gap-[20px] flex flex-col lg:flex-row p-5 items-center" :style="{ height: 'calc(100vh - 80px)' }">
             <img :src="product.image" :alt="product.name" className="h-64 object-scale-down rounded" loading="lazy"/>
-            <div className="!ml-5 pb-[15px] md:pb-0">
+            <div className="ml-0 !md:ml-5 pb-[15px] md:pb-0">
                 <h1 className="text-2xl font-bold mt-4">{{ product.name }}</h1>
                 <p className="product-description text-gray-600 !mt-2 text-justify">{{ product.description }}</p>
                 <p className="text-xl font-semibold !my-4">
