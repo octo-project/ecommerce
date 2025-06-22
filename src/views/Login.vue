@@ -42,13 +42,17 @@
             loading.value = true;  
 
             await authentificate(username.value, password.value, (token: string) => {
-                const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(token);
-                const decodedToken: DecodedTokenType = {...jswtDecodedToken, token}
-                setAuthUser(decodedToken)
-                router.push('/');
+                if(token) {
+                    const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(token);
+                    const decodedToken: DecodedTokenType = {...jswtDecodedToken, token}
+                    setAuthUser(decodedToken)
+                    router.push('/');
+                }else {
+                    error.value = 'Invalid email or password (Try again)';
+                }
             })
         } catch (err) {
-            error.value = 'Invalid email or password';
+            error.value = 'Unable to connect to the server.';
         } finally {
             loading.value = false   
         }
