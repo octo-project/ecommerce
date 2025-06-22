@@ -22,6 +22,8 @@
             <p :class="{'invisible': !error, 'block text-red-500 text-center min-h-[24px] !mt-4': true }">{{ error || " " }}</p>
         </div>
     </div>
+    <!-- Modal signIn -->
+    <Modal v-if="openConfirmationModal" :icon="'congratulation.svg'" :validate="validateSignIn" :close-modal="closeModal" :message="modalContent" :action-message="`Congratulation ${ username }, You’ve successfully signed in. We invite you to log in to fully enjoy your session. `" :title="'Welcome'" :ok-button-label="'S’authentifier '"/>
 </template>
 
 
@@ -29,6 +31,7 @@
     import {ref} from 'vue';
     import axios from 'axios';
     import {useRouter} from 'vue-router';
+    import Modal from '@/components/modal/Modal.vue';
 
     const email = ref<string>('');
     const username = ref<string>('');
@@ -37,6 +40,15 @@
     const error = ref<string|null>(null);
     
     const router = useRouter(); 
+    
+    const modalContent = ref<string>("");
+    const openConfirmationModal = ref<boolean>(false);
+    const closeModal = () => {
+        openConfirmationModal.value = false
+    }
+    const validateSignIn = () => {
+        router.push('/login')
+    }
 
     const signUp = async () => {
         error.value = null;
@@ -48,7 +60,7 @@
                 pseudo: username.value,
                 password: password.value,
             })
-            router.push('/login')
+            openConfirmationModal.value = true
         } catch (error) {
             error.value = "Failed to sign up. Please try again.";
         } finally {
