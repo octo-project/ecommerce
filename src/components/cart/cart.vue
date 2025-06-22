@@ -22,14 +22,14 @@
             </div>
         </div>
     </Transition>
-    <Modal v-if="openConfirmationModal" :validate="validateRemoveProduct" :close-modal="closeModal" :message="modalContent" :action-message="'Are you sure to remove : '" :title="'Remove product'" :ok-button-label="'Remove'"/>
+    <Modal v-if="openConfirmationModal" :icon="'error.svg'" :validate="validateRemoveProduct" :close-modal="closeModal" :message="modalContent" :action-message="'Are you sure to remove : '" :title="'Remove product'" :ok-button-label="'Remove'"/>
 </template>
 
 <script setup lang="ts">
     import './cart.css'
     import axios from 'axios';
     import {ref, watch} from 'vue';
-    import { QueryClient, useQuery } from '@tanstack/vue-query';
+    import { useQuery } from '@tanstack/vue-query';
     import Modal from '@/components/modal/Modal.vue';
     import { useUserStore } from '@/stores/user-store';
     import CartItem from '@/components/cart/cartItem.vue';

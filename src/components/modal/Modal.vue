@@ -7,7 +7,7 @@
                     <img @click="props.closeModal" id="close-modal-button" className="disabled-close cursor-pointer" src="@/components/icons/close.svg" width="30" alt="close" loading="lazy">
                 </div>
                 <div className="disabled-close flex !space-x-2 items-center p-3 !pt-5">
-                    <img src="@/components/icons/warning.svg" width="35" className="disabled-close" alt="warning" loading="lazy">
+                    <img  :src="`/icons/${props.icon}`" width="35" className="disabled-close" alt="warning" loading="lazy">
                     <div className="disabled-close">
                         <span className="disabled-close">{{ props.actionMessage }}</span>
                         <span className="!font-semibold disabled-close line-clamp-2">{{ props.message }}</span>
@@ -23,14 +23,20 @@
 </template>
 
 <script setup lang="ts">
+    import { ref } from 'vue';
 
     const props = defineProps<{
         title: string;
+        icon?: string;
         message: string;
         validate: () => void;
         actionMessage: string;
         okButtonLabel: string;
         closeModal: () => void;
     }>()
+
+    const iconPath = ref<string>(`@/components/icons/${props.icon}`);
+
+    console.log("iconPath : ", iconPath.value)
    
 </script>
