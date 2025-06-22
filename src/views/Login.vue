@@ -23,7 +23,6 @@
 
 <script setup lang="ts">
     import {ref} from 'vue';
-    import axios from 'axios';
     import {useRouter} from 'vue-router';
     import { jwtDecode } from 'jwt-decode';
     import { DecodedTokenType } from '@/types/type';

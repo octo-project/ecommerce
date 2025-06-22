@@ -65,7 +65,7 @@
         refetchOnMount: true, 
         refetchOnWindowFocus: true,
         enabled: !!authUser.cartId && !! authUser.token,
-        queryKey: ['panier', authUser.cartId, authUser.token],
+        queryKey: ['panier', authUser.token],
         queryFn: () => getCartById(authUser.cartId, authUser.token)
     })
 
