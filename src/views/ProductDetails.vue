@@ -24,12 +24,13 @@
 
 <script setup lang="ts">
     import axios from 'axios';
-    import {ref, onMounted} from 'vue';
+    import {ref, onMounted, computed} from 'vue';
     import {useRoute, useRouter} from 'vue-router';
     import { useUserStore } from '@/stores/user-store';
     import NavBar from '@/components/navbar/Navbar.vue';
-    import { useQueryClient } from '@tanstack/vue-query';
+    import { getCartById } from '@/services/cartServices';
     import SnackBar from '@/components/snackbar/Snackbar.vue';
+    import { useQuery, useQueryClient } from '@tanstack/vue-query';
 
     interface ProductDetail {
         id: number; 
@@ -47,8 +48,19 @@
     const product = ref<ProductDetail | null>(null);
     const snackBarState=ref<'succes'|'error'|null>(null);
     const snackBarMessage=ref<string>("");
-    const {authUser} = useUserStore();
+    const {authUser, setCartId} = useUserStore();
     const userId = ref<number>(authUser.userId);
+    const cartId = ref<number>(authUser.cartId);
+
+    /**
+     * Querying product in panier
+     */
+    const { refetch } = useQuery({
+        staleTime: 1000 * 60,
+        queryKey: computed(() => ['panier', authUser.token]),
+        queryFn: () => getCartById(cartId.value, authUser.token),
+        enabled: computed(() => !!cartId.value && !! authUser.token),
+    })
     
     onMounted( async () => {
         try {
@@ -82,14 +94,28 @@
                 snackBarState.value = 'succes';
                 snackBarMessage.value = 'Product added to cart.';
 
-                /**
-                 * Invalidate queryKey : pqnier
-                 */
-                try {
-                    await queryClient.invalidateQueries({queryKey: ['panier']})
-                } catch (error) {
-                    console.error("invalidate cache error : ", error)
+                if(authUser.cartId){
+                    /**
+                     * Invalidate queryKey : panier
+                     */
+                    try {
+                        await queryClient.invalidateQueries({queryKey: ['panier', authUser.token]})
+                    } catch (error) {
+                        console.error("invalidate cache error : ", error)
+                    }
+                }else {
+                    /**
+                     * Get cart id from request response and update store
+                     * */ 
+                    cartId.value = response.data?.data?.id
+                    
+                    if(response.data?.data?.id) {
+                        // call store update 
+                        setCartId(response.data?.data?.id)
+                        const res = await refetch()
+                    }
                 }
+                
             }else{
                 snackBarState.value = 'error';
                 snackBarMessage.value = 'Failed to add product to cart.';

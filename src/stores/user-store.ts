@@ -24,6 +24,9 @@ export const useUserStore = defineStore('user', {
             localStorage.setItem("token", data.token);
             this.authUser = data;
         },
+        setCartId(id: number){
+            this.authUser = {...this.authUser, cartId: id}
+        },
         getAuthUser(){
             return this.authUser;
         } 
