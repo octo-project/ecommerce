@@ -15,6 +15,40 @@
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
       }
+
+      .btn-icon {
+        gap: 4px;
+        display: flex;
+        align-items: center;
+      }
+
+      .btn-icon::before {
+          content: "";
+          width: 16px;
+          height: 16px;
+          fill: white;
+          display: inline-block;
+          background-size: contain !important;
+      }
+
+      .--home::before {
+        background: url('/public/icons/dashboard/home.svg');
+      }
+      .--account::before {
+        background: url('/public/icons/dashboard/user.svg');
+      }
+      .--cart::before {
+        background: url('/public/icons/dashboard/cart.svg');
+      }
+      .--product::before {
+        background: url('/public/icons/dashboard/product.svg');
+      }
+      .--invoice::before {
+        background: url('/public/icons/dashboard/invoice.svg');
+      }
+      .--setting::before {
+        background: url('/public/icons/dashboard/setting.svg');
+      }
     </style>
   </head>
   <body>
