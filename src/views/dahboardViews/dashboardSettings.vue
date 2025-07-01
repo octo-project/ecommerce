@@ -1,5 +1,5 @@
 <template>
-    <div>
-        <h3>Dashboard Settings</h3>
+    <div class="w-full text-amber-500 p-5">
+        <h1 class="text-xl !font-bold">Dashboard Settings</h1>
     </div>
 </template>
