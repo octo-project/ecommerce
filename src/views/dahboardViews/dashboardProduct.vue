@@ -1,17 +1,37 @@
 <template>
     <div class="w-full text-amber-500 p-5">
         <h1 class="text-xl !font-bold">Product Management</h1>
+        <div>
+            <button @click="isFormModalNewProductOpen = true" class="cursor-pointer flex flex-row gap-1 items-center hover:text-white"><PlusIcon class="size-4"/> New product</button>
+        </div>
         <div class="!mt-3">
-           <DashboardTable :table="productTable"/>
+           <DashboardTable :table="productTable" :selectProductToUpdate="selectProductToUpdate"/>
         </div>
     </div>
+
+    <NewProductModal :is-form-modal-open="isFormModalNewProductOpen" :update-modal-state="updateModalNewProductState"/>
+    <DetailProductModal :is-form-modal-open="isFormModalEditProductOpen" :update-modal-state="updateModalEditProductState"/>
 </template>
 
 <script setup lang="ts">
     import { ref } from 'vue';
-    import { DashBoardProductType } from '@/types/dashboardProductType';
+    import { PlusIcon } from '@heroicons/vue/24/solid'
+    import { DashBoardProductType } from '@/types/dashboardProductType'
     import DashboardTable from '@/components/dashboard/table/DashboardTable.vue'
-    import { createColumnHelper, getCoreRowModel, useVueTable } from '@tanstack/vue-table';
+    import NewProductModal from '@/components/modal/dashboardModal/NewProductModal.vue'
+    import { createColumnHelper, getCoreRowModel, useVueTable } from '@tanstack/vue-table'
+    import DetailProductModal from '@/components/modal/dashboardModal/EditProductModal.vue'
+
+    const isFormModalNewProductOpen = ref(false)
+    const isFormModalEditProductOpen = ref(false)
+
+    const updateModalNewProductState = (value) => isFormModalNewProductOpen.value = value
+    const updateModalEditProductState = (value) => isFormModalEditProductOpen.value = value
+
+    const selectProductToUpdate = (productId: number) => {
+        isFormModalEditProductOpen.value = true
+        console.log("product id : ", productId)
+    }
 
     const Products: DashBoardProductType[] = [
         {id:1, label: "Yamaha C4", category: "Scooter", subCategory: "Moto", price: 6000000},
