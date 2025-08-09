@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(row, rowIndex) in props.table.getRowModel().rows" :key="row.id" :class="rowIndex % 2 === 0 ? 'bg-amber-200' : 'bg-amber-50'">
+            <tr @click="selectProductToUpdate(+(row.original as any).id)" v-for="(row, rowIndex) in props.table.getRowModel().rows" :key="row.id" :class="rowIndex % 2 === 0 ? 'bg-amber-200' : 'bg-amber-50'">
                 <td class="text-center cursor-pointer h-[30px] text-black" v-for="cell in row.getVisibleCells()" :key="cell.id">
                     <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()"/>
                 </td>
@@ -21,6 +21,7 @@
     import type { Table } from '@tanstack/vue-table';
 
     const props = defineProps<{
-        table: Table<TData>
+        table: Table<TData>,
+        selectProductToUpdate?: (productId: number) => void
     }>()
 </script>
