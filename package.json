@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.12",
     "@tanstack/vue-query": "^5.74.9",
+    "@tanstack/vue-table": "^8.21.3",
     "axios": "^1.8.2",
     "jwt-decode": "^4.0.0",
     "pinia": "^3.0.1",
