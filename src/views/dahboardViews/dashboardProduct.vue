@@ -1,11 +1,12 @@
 <template>
-    <div class="w-full text-amber-500 p-5">
+    <div class="w-full text-amber-500 p-5 !ml-[200px]">
         <h1 class="text-xl !font-bold">Product Management</h1>
         <div>
             <button @click="isFormModalNewProductOpen = true" class="cursor-pointer flex flex-row gap-1 items-center hover:text-white"><PlusIcon class="size-4"/> New product</button>
         </div>
-        <div class="!mt-3">
-           <DashboardTable :table="productTable" :selectProductToUpdate="selectProductToUpdate"/>
+        <div class="!mt-3 overflow-auto pb-[19px]">
+            <div v-if="isLoading" className="text-center">Loading ...</div>
+            <DashboardTable v-else :table="productTable" :selectProductToUpdate="selectProductToUpdate"/>
         </div>
     </div>
 
@@ -14,13 +15,34 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { computed, ref } from 'vue'
+    import { useQuery } from '@tanstack/vue-query'
     import { PlusIcon } from '@heroicons/vue/24/solid'
-    import { DashBoardProductType } from '@/types/dashboardProductType'
+    import { useUserStore } from '@/stores/user-store'
+    import { DashBoardProductType } from '@/types/type'
+    import { getDashboardProductList } from '@/services/productServices'
     import DashboardTable from '@/components/dashboard/table/DashboardTable.vue'
     import NewProductModal from '@/components/modal/dashboardModal/NewProductModal.vue'
     import { createColumnHelper, getCoreRowModel, useVueTable } from '@tanstack/vue-table'
     import DetailProductModal from '@/components/modal/dashboardModal/EditProductModal.vue'
+
+    /**
+     * Get connected user data from authUser
+     */
+    const {authUser} = useUserStore();
+
+    /**
+     * Querying product list    
+     */
+    const {data, isLoading, error} = useQuery({
+        staleTime: 1000 * 60,
+        refetchOnMount: true,
+        enabled: !!authUser.token,
+        refetchOnWindowFocus: true,
+        queryKey: ['products', authUser.token],
+        queryFn: () => getDashboardProductList(authUser.token),
+    })
+    const products = computed(() => data.value || [])
 
     const isFormModalNewProductOpen = ref(false)
     const isFormModalEditProductOpen = ref(false)
@@ -30,18 +52,9 @@
 
     const selectProductToUpdate = (productId: number) => {
         isFormModalEditProductOpen.value = true
-        console.log("product id : ", productId)
     }
 
-    const Products: DashBoardProductType[] = [
-        {id:1, label: "Yamaha C4", category: "Scooter", subCategory: "Moto", price: 6000000},
-        {id:2, label: "PS5", category: "Consoles de jeux", subCategory: "PlayStation", price: 4000000},
-        {id:3, label: "XBOX", category: "Consoles de jeux", subCategory: "Xbox Series", price: 3000000},
-        {id:4, label: "Google Pixel 9", category: "Smartphones", subCategory: "Android", price: 4000000},
-        {id:5, label: "iPhone 16", category: "Smartphones", subCategory: "Apple iPhone", price: 5000000},
-    ]
-
-    const data = ref(Products)
+    const productData = ref(products)
     const columnHelper = createColumnHelper<DashBoardProductType>()
 
     const productTableColumns = [
@@ -50,14 +63,17 @@
             cell: info => info.getValue(),
             footer: props => props.column.id,
         }),
-        columnHelper.accessor('label', {
-            header: "Produit",
+        columnHelper.accessor('name', {
+            header: "Label",
             cell: info => info.getValue(),
+            meta: {
+                class: 'w-[300px]'
+            },
             footer: props => props.column.id,
         }),
-        columnHelper.accessor('category', {
+        columnHelper.accessor('image', {
             header: "Category",
-            cell: info => info.getValue(),
+            cell: info => "unkown",
             footer: props => props.column.id,
         }),
         columnHelper.accessor('price', {
@@ -68,7 +84,7 @@
     ]
 
     const productTable = useVueTable({
-        get data() {return data.value},
+        get data() {return productData.value},
         columns: productTableColumns,
         getCoreRowModel: getCoreRowModel(),
     })
