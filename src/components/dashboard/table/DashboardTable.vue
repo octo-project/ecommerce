@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr @click="selectProductToUpdate(+(row.original as any).id)" v-for="(row, rowIndex) in props.table.getRowModel().rows" :key="row.id" :class="rowIndex % 2 === 0 ? 'bg-amber-200' : 'bg-amber-50'">
-                <td class="text-center cursor-pointer h-[30px] text-black" v-for="cell in row.getVisibleCells()" :key="cell.id">
+                <td class="text-center cursor-pointer h-[48px] text-black" v-for="cell in row.getVisibleCells()" :key="cell.id" :class="(cell.column.columnDef.meta as any)?.class || ''">
                     <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()"/>
                 </td>
             </tr>

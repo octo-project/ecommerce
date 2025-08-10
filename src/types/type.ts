@@ -57,3 +57,5 @@ export type ProductType = {
     updatedAt: string;
     description: string;
 }
+
+export type DashBoardProductType = Omit<ProductType, 'createdAt' | 'updatedAt'>
