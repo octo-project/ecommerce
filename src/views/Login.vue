@@ -41,12 +41,12 @@
             error.value = null;
             loading.value = true;  
 
-            await authentificate(username.value, password.value, (token: string) => {
+            await authentificate(username.value, password.value, (token: string, redirectUrl: string) => {
                 if(token) {
                     const jswtDecodedToken: Omit<DecodedTokenType, 'token'> = jwtDecode(token);
                     const decodedToken: DecodedTokenType = {...jswtDecodedToken, token}
                     setAuthUser(decodedToken)
-                    router.push('/');
+                    router.push(redirectUrl);
                 }else {
                     error.value = 'Invalid email or password (Try again)';
                 }
