@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', {
             const cacheStore = useCacheStore();
 
             cacheStore.setCache("authUser", null);
+            localStorage.clear();
             this.authUser = null;
         },
         setAuthUser(data: DecodedTokenType){
