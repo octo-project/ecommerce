@@ -2,7 +2,7 @@
     <div class="w-full text-amber-500 p-5 !ml-[200px]">
         <h1 class="text-xl !font-bold">Account Management</h1>
         <div class="!mt-3">
-           <DashboardTable :table="accountTable"/>
+           <DashboardTable :table="accountTable" :selectProductToUpdate="showUserDetail"/>
         </div>
     </div>
 </template>
@@ -16,26 +16,23 @@
     import { createColumnHelper, getCoreRowModel, useVueTable } from '@tanstack/vue-table';
 
     const store = useUserStore();
+    let Accounts: DashboardAccountType[] = []
+    const dataList = ref(Accounts)
 
     onMounted(async () => {
         try {
             if(store.authUser.userId){
-                console.log("Get dashboard user list : ", store.authUser.token);
+                getDashboardUserList(store.authUser.token, (data) => {
+                    dataList.value = (data?.users||[]).map(user => ({
+                        "id": user.id, "active": false, "email": user.email, "pseudo": user.pseudo
+                    }))
+                })
             }
-            console.log('store : ', store.authUser.userId);
         } catch (error) {
             console.error("Undefined store", error);
         }
     })
 
-    const Accounts: DashboardAccountType[]= [
-        {id:1, active: true, email: 'lolo@gmail.com', pseudo:'Koto'},
-        {id:2, active: true, email: 'jeanLove@gmail.com', pseudo:'Jean'},
-        {id:3, active: false, email: 'rakoto@gmail.com', pseudo:'Tiger'},
-        {id:4, active: true, email: 'kely@gmail.com', pseudo:'Kely'},
-        {id:5, active: false, email: 'lalaina@gmail.com', pseudo:'lala'}
-    ]
-    const data = ref(Accounts)
     const columnHelper = createColumnHelper<DashboardAccountType>()
 
     const accountTableColumns = [
@@ -61,8 +58,12 @@
         }),
     ]
 
+    const showUserDetail = (userId: number) => {
+        console.log("user id : ", userId)
+    }
+
     const accountTable = useVueTable({
-        get data() {return data.value},
+        get data() {return dataList.value},
         columns: accountTableColumns,
         getCoreRowModel: getCoreRowModel()
     })
