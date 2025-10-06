@@ -18,3 +18,20 @@ export const getUserDetail = async (userId: number, token: string, callBack: (da
         console.error("Failed to get user detail");
     }
 }
+
+export const getDashboardUserList = async (token: string, callBack: (data: any)=>void) => {
+    try {
+        const response = await axios.get(`${host}/dashboard/user-list`, {
+            headers: {
+                Authorization:  `Bearer ${token}`
+            }
+        })
+        if(response.status == 200){
+            callBack(response.data)
+        }else {
+            console.error("Failed to get dashboard user list");
+        }
+    } catch (error) {
+        console.error("Failed to get dashboard user list")
+    }
+}
