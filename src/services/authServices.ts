@@ -1,8 +1,10 @@
 import axios from "axios";
 
-export const authentificate = async (pseudo: string, password: string, callBack:(token:string)=> void) => {
+const host = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`
+
+export const authentificate = async (pseudo: string, password: string, callBack:(token:string|null)=> void) => {
     try {
-        const response = await axios.post("http://localhost:5001/login",{
+        const response = await axios.post(`${host}/login`,{
             pseudo,
             password
         });
@@ -13,5 +15,17 @@ export const authentificate = async (pseudo: string, password: string, callBack:
         }
     } catch (error) {
         callBack(null)
+    }
+}
+
+export const signUp = async (email: string, pseudo: string, password: string) => {
+    try {
+      return await axios.post(`${host}/signup`, {
+            email,
+            pseudo,
+            password,
+        })  
+    } catch (error) {
+        throw new Error("Error while sign up.");
     }
 }
