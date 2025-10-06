@@ -22,18 +22,19 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
+# Functionality
+1 - Login
+2 - Sign Up 
+3 - See product list
 
-```sh
-npm run build
-```
+4 - Admin dashboard
+<br/>
+To access the dashboard navigate to the route /dashboard
 
-# Home
-1 - Fetch product from API.
-2 - Display product using ProductCard.vue component. 
-3 - Add loading and error handling.
-
-4 - Navigation Guards
+5 - Admin dashboard Account Management 
+<br/>
+description : Pour afficher la liste des utilisateurs inscrit sur l'application <br/>
+route : /dashboard/accounts
 
 ## Product Listing
 ## Product Details
