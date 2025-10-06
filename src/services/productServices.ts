@@ -1,8 +1,10 @@
 import axios from "axios";
 import { DashBoardProductType, ProductType } from "@/types/type";
 
+const host = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`
+
 export const productList = async (token: string) : Promise<ProductType[]> => {
-    const response = await axios.get("http://localhost:5001/product-list", {
+    const response = await axios.get(`${host}/product-list`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -11,7 +13,7 @@ export const productList = async (token: string) : Promise<ProductType[]> => {
 }
 
 export const getDashboardProductList = async (token: string) : Promise<DashBoardProductType[]> => {
-    const response = await axios.get("http://localhost:5001/product-list", {
+    const response = await axios.get(`${host}/product-list`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

@@ -32,6 +32,7 @@
     import axios from 'axios';
     import {useRouter} from 'vue-router';
     import Modal from '@/components/modal/Modal.vue';
+    import {signUp as signUpService} from '@/services/authServices';
 
     const email = ref<string>('');
     const username = ref<string>('');
@@ -55,11 +56,11 @@
         loading.value = true;
 
         try {
-            const response = await axios.post("http://localhost:5001/signup", {
-                email: email.value,
-                pseudo: username.value,
-                password: password.value,
-            })
+            const response = await signUpService(
+                email.value,
+                username.value,
+                password.value,
+            )
             openConfirmationModal.value = true
         } catch (error) {
             error.value = "Failed to sign up. Please try again.";

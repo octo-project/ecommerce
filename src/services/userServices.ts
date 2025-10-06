@@ -1,9 +1,11 @@
 import axios from "axios";
 import { UserType } from "@/types/type";
 
+const host = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`
+
 export const getUserDetail = async (userId: number, token: string, callBack: (data: UserType)=>void) => {
     try {
-        const response = await axios.get(`http://localhost:5001/user/${userId}`, {
+        const response = await axios.get(`${host}/user/${userId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
