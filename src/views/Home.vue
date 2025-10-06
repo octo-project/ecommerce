@@ -1,13 +1,14 @@
 <template>
     <div class="w-full">
         <NavBar/>
-        <div className="p-5 overflow-x-hidden">
-            <h1 className="text-2xl font-bold !mb-4">Latest Products</h1>
+        <div className="p-5 overflow-x-hidden h-auto">
+            <h1 className="text-2xl font-bold !mb-4 text-white">Latest Products</h1>
             <div v-if="isLoading" className="text-center">Loading ...</div>
             <div v-else-if="error" className="text-red-500">{{error}}</div>
             <div v-else className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <ProductCard v-for="product in products" :key="product.id" :product="product"/>
             </div>
+            <NoDataMessage v-if="products && products.length == 0" /> 
         </div>
     </div>
 </template>
@@ -20,6 +21,7 @@
     import NavBar from '@/components/navbar/Navbar.vue';
     import { productList } from '@/services/productServices';
     import ProductCard from '@/components/productCard/ProductCard.vue';
+    import NoDataMessage from '@/components/message/NoDataMessage.vue';
 
     /**
      * Get connected user data from authUser
