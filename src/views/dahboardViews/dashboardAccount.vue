@@ -8,10 +8,25 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
+    import { useUserStore } from '@/stores/user-store';
+    import { getDashboardUserList } from "@/services/userServices";
+    import { DashboardAccountType } from '@/types/dashboardAccountType';
     import DashboardTable from '@/components/dashboard/table/DashboardTable.vue'
     import { createColumnHelper, getCoreRowModel, useVueTable } from '@tanstack/vue-table';
-    import { DashboardAccountType } from '@/types/dashboardAccountType';
+
+    const store = useUserStore();
+
+    onMounted(async () => {
+        try {
+            if(store.authUser.userId){
+                console.log("Get dashboard user list : ", store.authUser.token);
+            }
+            console.log('store : ', store.authUser.userId);
+        } catch (error) {
+            console.error("Undefined store", error);
+        }
+    })
 
     const Accounts: DashboardAccountType[]= [
         {id:1, active: true, email: 'lolo@gmail.com', pseudo:'Koto'},
