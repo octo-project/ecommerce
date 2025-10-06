@@ -2,7 +2,7 @@ import axios from "axios";
 
 const host = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`
 
-export const authentificate = async (pseudo: string, password: string, callBack:(token:string|null)=> void) => {
+export const authentificate = async (pseudo: string, password: string, callBack:(token:string|null, redictUrl: string)=> void) => {
     try {
         const response = await axios.post(`${host}/login`,{
             pseudo,
@@ -10,11 +10,11 @@ export const authentificate = async (pseudo: string, password: string, callBack:
         });
 
         if(response.status == 201){
-            callBack(response.data.data.token)
+            callBack(response.data.data.token, response.data.data.redirectUrl)
             return
         }
     } catch (error) {
-        callBack(null)
+        callBack(null, '')
     }
 }
 
