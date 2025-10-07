@@ -46,7 +46,7 @@
 
     const logout = () => {
         store.clearAuthUser();
-        router.push("/login");
+        router.replace("/login");
     }
 
     const toogleCart = () => {

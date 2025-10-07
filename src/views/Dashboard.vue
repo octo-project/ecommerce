@@ -41,7 +41,7 @@
 
     const handleLogout = () => {
         store.clearAuthUser();
-        router.push("/login");
+        router.replace("/login");
     }
 </script>
 
