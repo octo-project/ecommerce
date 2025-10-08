@@ -1,5 +1,5 @@
 @import './base.css';
-@import "tailwindcss";
+@import 'tailwindcss';
 
 body {
   margin: 0px;
@@ -15,39 +15,39 @@ body {
   .app-title {
     display: none;
   }
-  .navbar-menu{
+  .navbar-menu {
     width: 100%;
     justify-content: space-between;
   }
-  .product-detail-container{
+  .product-detail-container {
     flex-direction: column;
   }
   .product-detail-container > * {
-    margin-top: 1.50em;
+    margin-top: 1.5em;
   }
   .product-description {
     margin-top: 4px;
   }
-  .modal-confirmation{
+  .modal-confirmation {
     width: 327px;
     height: 175px !important;
   }
-  .cart-container{
+  .cart-container {
     width: 100%;
   }
-  .cart-heading{
-    display: flex; 
+  .cart-heading {
+    display: flex;
     align-items: center;
     justify-content: space-between;
   }
-  .login-container{
+  .login-container {
     background: #fff;
     box-shadow: none;
   }
 }
 
 @media (min-width: 415px) {
-  .cart-close-img{
+  .cart-close-img {
     display: none;
   }
 }

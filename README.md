@@ -23,23 +23,26 @@ npm run dev
 ```
 
 # Functionality
+
 1 - Login
-2 - Sign Up 
+2 - Sign Up
 3 - See product list
 
 4 - Admin dashboard
 <br/>
 To access the dashboard navigate to the route /dashboard
 
-5 - Admin dashboard Account Management 
+5 - Admin dashboard Account Management
 <br/>
 description : Pour afficher la liste des utilisateurs inscrit sur l'application <br/>
 route : /dashboard/accounts
 
 ## Product Listing
+
 ## Product Details
+
 ## Shopping Cart
+
 ## Checkout Page
-## State Management  
 
-
+## State Management
